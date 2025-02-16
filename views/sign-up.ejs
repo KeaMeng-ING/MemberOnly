@@ -1,222 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <style>
-      .invalid {
-        border: 1px solid red;
-      }
-      .error-message {
-        color: red;
-        font-size: 14px;
-        margin-top: 4px;
-      }
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        max-width: 400px;
-      }
-      .form-group {
-        display: flex;
-        flex-direction: column;
-      }
-      .password-requirements {
-        font-size: 12px;
-        color: #666;
-        margin-top: 4px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <form action="/sign-up" method="POST" novalidate>
-      <div id="error-container"></div>
+<head>
+    <%- include ('partials/head') %>
+</head>
+<body>
+    <main class="flex min-h-screen flex-col items-center justify-center p-24 bg-pattern">
+        <div class="w-full max-w-md space-y-8 rounded-xl bg-gray-800 bg-opacity-50 p-8 backdrop-filter backdrop-blur-lg border border-purple-300 border-opacity-20">
+          <h2 class="text-3xl font-bold text-center text-white">Sign Up</h2>
+          <form class="mt-8 space-y-6" action="/sign-up" method="POST" novalidate>
+            <div>
 
-      <div class="form-group">
-        <label for="firstName">First Name</label>
-        <input
-          id="firstName"
-          name="firstName"
-          type="text"
-          placeholder="eg. Kea Meng"
-          required
-        />
-        <div class="error-message" data-error="firstName"></div>
-      </div>
+              <div id="error-container"></div>
 
-      <div class="form-group">
-        <label for="lastName">Last Name</label>
-        <input id="lastName" name="lastName" type="text" required />
-        <div class="error-message" data-error="lastName"></div>
-      </div>
 
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input id="username" name="username" type="text" required />
-        <div class="error-message" data-error="username"></div>
-      </div>
+              <label for="firstName" class="sr-only">
+                First Name
+              </label>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-700 text-white"
+                placeholder="First Name"
+              />
+              <div class="error-message" data-error="firstName"></div>
+            </div>
 
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" required />
-        <div class="error-message" data-error="email"></div>
-      </div>
+            <div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$"
-        />
-        <div class="error-message" data-error="password"></div>
-      </div>
+              <div id="error-container"></div>
 
-      <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input
-          id="confirmPassword"
-          name="confirmPassword"
-          type="password"
-          required
-        />
-        <div class="error-message" data-error="confirmPassword"></div>
-      </div>
 
-      <button type="submit">Sign Up</button>
-    </form>
+              <label for="lastName" class="sr-only">
+                Last Name
+              </label>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-700 text-white"
+                placeholder="Last Name"
+              />
+              <div class="error-message" data-error="lastName"></div>
+            </div>
 
-    <script>
-      const form = document.querySelector("form");
-      const inputs = form.querySelectorAll("input");
-      const errorContainer = document.getElementById("error-container");
-      const password = document.getElementById("password");
-      const confirmPassword = document.getElementById("confirmPassword");
+            <div>
 
-      // Validation messages
-      const errorMessages = {
-        valueMissing: (fieldName) => `${fieldName} is required`,
-        typeMismatch: {
-          email: "Please enter a valid email address",
-        },
-        patternMismatch: {
-          password: `<ul style="margin: 4px 0; padding-left: 20px;">
-    <li>At least 8 characters long</li>
-    <li>At least one uppercase letter</li>
-    <li>At least one number</li>
-    <li>At least one special character (!@#$%^&*)</li>
-  </ul>`,
-        },
-        passwordMismatch: "Passwords do not match",
-      };
+              <div id="error-container"></div>
 
-      // Handle input blur events
-      inputs.forEach((input) => {
-        input.addEventListener("blur", validateInput);
-        input.addEventListener("input", () => {
-          // Clear error when user starts typing
-          if (input.classList.contains("invalid")) {
-            clearError(input);
-          }
-          // Check password match on input
-          if (input.id === "password" || input.id === "confirmPassword") {
-            validatePasswordMatch();
-          }
-        });
-      });
 
-      // Handle form submission
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        clearAllErrors();
+              <label for="username" class="sr-only">
+                Username
+              </label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-700 text-white"
+                placeholder="Username"
+              />
+              <div class="error-message" data-error="username"></div>
+            </div>
 
-        let isValid = true;
+            <div>
+              <label for="email" class="sr-only">
+                Email address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-700 text-white"
+                placeholder="Email address"
+              />
+              <div class="error-message" data-error="email"></div>
+            </div>
+            <div>
+              <label for="password" class="sr-only">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-700 text-white"
+                pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$"
+                placeholder="Password"
+              />
+              <div class="error-message" data-error="password"></div>
+            </div>
+            <div>
+              <label for="confirmPassword" class="sr-only">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-700 text-white"
+                placeholder="Confirm Password"
+              />
+              <div class="error-message" data-error="confirmPassword"></div>
+            </div>
+            <div>
+              <button
+                type="submit"
+                class="w-full py-2 px-4 bg-purple-700 hover:bg-purple-600 text-white font-semibold rounded-lg transition duration-300 shadow-lg"
+              >
+                Sign Up
+              </button>
+            </div>
+          </form>
+          <p class="mt-2 text-center text-sm text-gray-300">
+            Already have an account?
+            <a href="/log-in" class="font-medium text-indigo-300 hover:text-indigo-200">
+              Log in
+            </a>
+          </p>
+        </div>
+      </main>
+      
+      <script>
+        const form = document.querySelector("form");
+        const inputs = form.querySelectorAll("input");
+        const errorContainer = document.getElementById("error-container");
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirmPassword");
+  
+        // Validation messages
+        const errorMessages = {
+          valueMissing: (fieldName) => `${fieldName} is required`,
+          typeMismatch: {
+            email: "Please enter a valid email address",
+          },
+          patternMismatch: {
+            password: `<ul style="margin: 4px 0; padding-left: 20px;">
+      <li>At least 8 characters long</li>
+      <li>At least one uppercase letter</li>
+      <li>At least one number</li>
+      <li>At least one special character (!@#$%^&*)</li>
+    </ul>`,
+          },
+          passwordMismatch: "Passwords do not match",
+        };
+  
+        // Handle input blur events
         inputs.forEach((input) => {
-          if (!validateInput({ target: input })) {
+          input.addEventListener("blur", validateInput);
+          input.addEventListener("input", () => {
+            // Clear error when user starts typing
+            if (input.classList.contains("invalid")) {
+              clearError(input);
+            }
+            // Check password match on input
+            if (input.id === "password" || input.id === "confirmPassword") {
+              validatePasswordMatch();
+            }
+          });
+        });
+  
+        // Handle form submission
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          clearAllErrors();
+  
+          let isValid = true;
+          inputs.forEach((input) => {
+            if (!validateInput({ target: input })) {
+              isValid = false;
+            }
+          });
+  
+          // Check password match
+          if (!validatePasswordMatch()) {
             isValid = false;
           }
+  
+          if (isValid) {
+            form.submit();
+          }
         });
-
-        // Check password match
-        if (!validatePasswordMatch()) {
-          isValid = false;
-        }
-
-        if (isValid) {
-          form.submit();
-        }
-      });
-
-      function validateInput(event) {
-        const input = event.target;
-        const isValid = input.checkValidity();
-
-        if (isValid) {
-          clearError(input);
-          return true;
-        } else {
-          showInputError(input);
-          return false;
-        }
-      }
-
-      function validatePasswordMatch() {
-        if (password.value && confirmPassword.value) {
-          if (password.value !== confirmPassword.value) {
-            confirmPassword.classList.add("invalid");
-            const errorElement = confirmPassword.parentElement.querySelector(
-              '[data-error="confirmPassword"]'
-            );
-            errorElement.textContent = errorMessages.passwordMismatch;
-            return false;
-          } else {
-            clearError(confirmPassword);
+  
+        function validateInput(event) {
+          const input = event.target;
+          const isValid = input.checkValidity();
+  
+          if (isValid) {
+            clearError(input);
             return true;
+          } else {
+            showInputError(input);
+            return false;
           }
         }
-        return true;
-      }
-
-      function showInputError(input) {
-        input.classList.add("invalid");
-        const errorElement = input.parentElement.querySelector(
-          `[data-error="${input.id}"]`
-        );
-
-        if (input.validity.valueMissing) {
-          errorElement.textContent = errorMessages.valueMissing(
-            input.previousElementSibling.textContent
-          );
-        } else if (input.validity.typeMismatch) {
-          errorElement.textContent = errorMessages.typeMismatch[input.type];
-        } else if (input.validity.patternMismatch) {
-          errorElement.innerHTML = errorMessages.patternMismatch[input.type];
+  
+        function validatePasswordMatch() {
+          if (password.value && confirmPassword.value) {
+            if (password.value !== confirmPassword.value) {
+              confirmPassword.classList.add("invalid");
+              const errorElement = confirmPassword.parentElement.querySelector(
+                '[data-error="confirmPassword"]'
+              );
+              errorElement.textContent = errorMessages.passwordMismatch;
+              return false;
+            } else {
+              clearError(confirmPassword);
+              return true;
+            }
+          }
+          return true;
         }
-      }
-
-      function clearError(input) {
-        input.classList.remove("invalid");
-        const errorElement = input.parentElement.querySelector(
-          `[data-error="${input.id}"]`
-        );
-        errorElement.textContent = "";
-      }
-
-      function clearAllErrors() {
-        errorContainer.textContent = "";
-        inputs.forEach((input) => {
-          clearError(input);
-        });
-      }
-
-      function showError(message) {
-        errorContainer.textContent = message;
-      }
-    </script>
-  </body>
+  
+        function showInputError(input) {
+          input.classList.add("invalid");
+          const errorElement = input.parentElement.querySelector(
+            `[data-error="${input.id}"]`
+          );
+  
+          if (input.validity.valueMissing) {
+            errorElement.textContent = errorMessages.valueMissing(
+              input.previousElementSibling.textContent
+            );
+          } else if (input.validity.typeMismatch) {
+            errorElement.textContent = errorMessages.typeMismatch[input.type];
+          } else if (input.validity.patternMismatch) {
+            errorElement.innerHTML = errorMessages.patternMismatch[input.type];
+          }
+        }
+  
+        function clearError(input) {
+          input.classList.remove("invalid");
+          const errorElement = input.parentElement.querySelector(
+            `[data-error="${input.id}"]`
+          );
+          errorElement.textContent = "";
+        }
+  
+        function clearAllErrors() {
+          errorContainer.textContent = "";
+          inputs.forEach((input) => {
+            clearError(input);
+          });
+        }
+  
+        function showError(message) {
+          errorContainer.textContent = message;
+        }
+      </script>   
+      
+</body>
 </html>

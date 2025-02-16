@@ -5,11 +5,7 @@
     <script src="/script/toggleOverlay.js" defer></script>
   </head>
   <body>
-    <h1 class="text-3xl font-bold underline text-blue-500">
-      Hello, Tailwind CSS!
-    </h1>
-    <p class="text-red-500">Welcome to</p>
-  
+    
     <% if (locals.user) {%>
     <h1>WELCOME BACK <%= user.username %></h1>
     <% if (locals.user.memberstatus !== 'member') { %>
@@ -29,7 +25,8 @@
 
     <% } else { %>
 
-    <h1>Home</h1>
+    <h1>WELCOME TO THE CLUB</h1>
+
     <a href="/log-in">LOG IN</a>
     <% }%>
 
