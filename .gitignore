@@ -14,3 +14,7 @@ yarn-error.log*
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+# Tailwind
+public/stylesheets/tailwind.css
+public/stylesheets/style.css

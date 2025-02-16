@@ -1,8 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  ontent: ["./views/**/*.ejs"],
+  content: ["./views/*.ejs"],
   theme: {
     extend: {},
   },
-  plugins: [require("tailwindcss"), require("autoprefixer")],
+  plugins: [
+    {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  ],
 };
