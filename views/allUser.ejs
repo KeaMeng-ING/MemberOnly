@@ -10,9 +10,9 @@
     <% allUser.forEach(user => { %>
     <div>
       <p>
-        <%= user.firstname %> | <%= user.lastname %> | <%= user.username %> |
-        <%= user.email %> | <%= user.password %> | <%= user.isadmin %> | <%=
-        user.memberstatus %>
+        <%= user.id %> | <%= user.firstname %> | <%= user.lastname %> | <%=
+        user.username %> | <%= user.email %> | <%= user.password %> | <%=
+        user.isadmin %> | <%= user.memberstatus %>
       </p>
     </div>
     <% }) %>

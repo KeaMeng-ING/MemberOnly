@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <a href="/">Back</a>
+    <h1>This is Home</h1>
+
+    <% if (locals.user) {%>
+    <button id="createMessage">Create Message</button>
+    <div class="dialog-overlay" id="dialogOverlay">
+      <div class="dialog">
+        <h2>Create Message</h2>
+        <form action="messages/newMessage" method="POST">
+          <label for="headline">Message Title</label>
+          <input type="text" id="headline" name="headline" />
+          <label for="description">Description</label>
+          <input type="text" id="description" name="description" />
+          <button type="submit">Join</button>
+          <button type="button" id="closeButton">Close</button>
+        </form>
+      </div>
+    </div>
+
+    <ul>
+      <% allMessage.forEach((message) => { %>
+      <li>
+        <h3><%= message.headline %></h3>
+        <p><%= message.description %></p>
+            <% if (locals.user.memberstatus == "member") { %>
+                <p>Author: <%= message.username %></p>
+                <p><%= new Date(message.timecreated).toLocaleString('en-US', { timeZone: 'Asia/Bangkok', hour12: true }) %></p>
+                <% if (message.userid == locals.user.id || locals.user.isAdmin) { %> 
+                <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-trash-can"></i>
+                <% } %>
+            <% } %>
+      </li>
+      <% }) %>
+    </ul>
+
+    <% } else { %>
+    <h1>In ELSE</h1>
+    <p>not log in</p>
+    <% }%>
+
+    <script>
+      document
+        .getElementById("createMessage")
+        .addEventListener("click", function () {
+          document.getElementById("dialogOverlay").style.display = "flex";
+        });
+
+      document
+        .getElementById("closeButton")
+        .addEventListener("click", function () {
+          document.getElementById("dialogOverlay").style.display = "none";
+        });
+    </script>
+  </body>
+</html>
