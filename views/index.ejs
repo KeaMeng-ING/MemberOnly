@@ -8,7 +8,7 @@
     
     <% if (locals.user) {%>
     <h1>WELCOME BACK <%= user.username %></h1>
-    <% if (locals.user.memberstatus !== 'member') { %>
+    <% if (locals.user.memberstatus !== 'Member') { %>
       <button id="joinButton">Join The Club</button>
 
     <% } else {%>
@@ -16,7 +16,7 @@
     <% }%>
 
     <p><%= user.memberstatus %></p>
-    <% if (user.memberstatus === "member") { %>
+    <% if (user.memberstatus === "Member") { %>
     <p>Thank you for being a member!</p>
     <% }%>
 

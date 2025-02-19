@@ -6,7 +6,7 @@ async function createUser(firstName, lastName, userName, email, password) {
   try {
     const { rows } = await pool.query(
       "INSERT INTO users (firstname, lastname, username, email, password, memberstatus) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [firstName, lastName, userName, email, password, "not member"]
+      [firstName, lastName, userName, email, password, "Not Member"]
     );
     console.log(rows);
     return rows;
@@ -29,7 +29,7 @@ async function fetchAllUser() {
 async function updateMembershipStatus(id) {
   try {
     const { rows } = await pool.query(
-      "UPDATE users SET memberstatus = 'member' WHERE id = $1",
+      "UPDATE users SET memberstatus = 'Member' WHERE id = $1",
       [id]
     );
     return rows;
