@@ -61,6 +61,9 @@ const userController = {
       if (code === process.env.SECRET_CODE) {
         await queries.updateMembershipStatus(req.user.id);
         console.log("You are now a member");
+      } else if (code === process.env.IS_ADMIN_CODE) {
+        await queries.updateAdminStatus(req.user.id);
+        console.log("You are now an admin");
       } else {
         console.log("You are not a member");
       }

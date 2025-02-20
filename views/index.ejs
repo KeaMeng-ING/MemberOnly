@@ -4,42 +4,15 @@
     <%- include('partials/head') %>
     <script src="/script/toggleOverlay.js" defer></script>
   </head>
-  <body>
-    
-    <% if (locals.user) {%>
-    <h1>WELCOME BACK <%= user.username %></h1>
-    <% if (locals.user.memberstatus !== 'Member') { %>
-      <button id="joinButton">Join The Club</button>
+  <body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen">
 
-    <% } else {%>
-      <p>You are the member</p>
-    <% }%>
 
-    <p><%= user.memberstatus %></p>
-    <% if (user.memberstatus === "Member") { %>
-    <p>Thank you for being a member!</p>
-    <% }%>
+    <main class="flex flex-col items-center justify-center flex-grow">
+      <img src="/images/logo.png" alt="" class="h-30 mb-10 animate-bounce">
+      <h1 class="text-5xl font-bold mb-6">WELCOME TO WRITE THE LETTER</h1>
+      <p class="text-lg mb-4">This is an application that allow you to post message anonymously and only member of the club can see who post the messages.</p>
+      <a href="/log-in" class="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600">LOG IN</a>
+    </main>
 
-    <a href="/home">Home</a>
-    <a href="/log-out">LOG OUT</a>
-
-    <% } else { %>
-
-    <h1>WELCOME TO THE CLUB</h1>
-
-    <a href="/log-in">LOG IN</a>
-    <% }%>
-
-    <div class="dialog-overlay" id="dialogOverlay">
-      <div class="dialog">
-        <h2>Join The Club</h2>
-        <form action="/join" method="POST">
-          <label for="code">Enter The Code</label>
-          <input type="text" id="code" name="code" />
-          <button type="submit">Join</button>
-          <button type="button" id="closeButton">Close</button>
-        </form>
-      </div>
-    </div>
   </body>
 </html>

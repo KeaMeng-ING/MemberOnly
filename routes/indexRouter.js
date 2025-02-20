@@ -4,6 +4,9 @@ const userController = require("../controllers/userController");
 const passport = require("passport");
 
 router.get("/", (req, res) => {
+  if (req.user) {
+    return res.redirect("/home");
+  }
   res.render("index", { user: req.user });
 });
 router.post("/join", userController.joinMember);

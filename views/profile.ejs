@@ -12,8 +12,15 @@
         <img src="/images/default_profile.png" alt="Profile Icon" class="w-20 h-20 rounded-full mb-4 mx-auto">
         <h2 class="text-3xl font-bold text-center text-white"> <%= user.username %>  </h2>
         <p class="text-center"> Member Status: <%= user.memberstatus %></p>
+        <% if (user.memberstatus == "Member") { %>
+        <p class="text-center" style="margin-top: 1rem;" >As a member, you can see who post the message and when they are posted</p>
+        <% } else if (user.isadmin) { %>
+        <p class="text-center" style="margin-top: 1rem;" >As an admin, you can see who post the message, when they are posted and edit or delete them</p>
+        <% } else { %>
+        <p class="text-center" style="margin-top: 1rem;" >As a guest, you can only see the message</p>
+        <% } %>
         <div class="space-y-4">
-          <% messages.forEach((message) => { %>
+          <% messages.reverse().forEach((message) => { %>
           <div
             key="{message.id}"
             class="rounded-xl bg-gray-800 bg-opacity-50 p-6 backdrop-filter backdrop-blur-lg border border-purple-300 border-opacity-20"

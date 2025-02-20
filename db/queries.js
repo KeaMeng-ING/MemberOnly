@@ -39,6 +39,19 @@ async function updateMembershipStatus(id) {
   }
 }
 
+async function updateAdminStatus(id) {
+  try {
+    const { rows } = await pool.query(
+      "UPDATE users SET memberstatus = 'Admin', isAdmin = true WHERE id = $1",
+      [id]
+    );
+    return rows;
+  } catch (error) {
+    console.error("Error updating admin status:", error);
+    throw error;
+  }
+}
+
 async function fetchAllMessage() {
   try {
     const { rows } = await pool.query(`
@@ -93,4 +106,5 @@ module.exports = {
   fetchAllMessage,
   createMessage,
   fetchUserandMessageById,
+  updateAdminStatus,
 };
