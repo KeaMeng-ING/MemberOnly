@@ -2,7 +2,6 @@
 const { Pool } = require("pg");
 require("dotenv").config(); // Load .env variables
 
-console.log(process.env.DB_HOST);
 module.exports = new Pool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,

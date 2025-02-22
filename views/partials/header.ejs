@@ -73,11 +73,14 @@
 
 <div class="dialog-overlay fixed inset-0 bg-black bg-opacity-50 items-center justify-center hidden" id="memberDialogOverlay">
   <div class="dialog p-6 rounded shadow-lg w-full max-w-md bg-purple-900 bg-pattern">
-    <h2 class="text-2xl font-bold mb-4 text-center">Join The Club</h2>
+    <h2 class="text-2xl font-bold mb-4 text-center text-white">Join The Club</h2>
     <form id="joinForm" action="/join" method="POST">
       <div class="mb-4">
-        <label class="block text-white mb-2" for="code">Enter the secret code</label>
-        <input type="text" id="code" name="code" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black" />
+        <label for="code" class="sr-only">
+          code
+        </label>
+        <input type="text" id="code" name="code" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-700 text-white"
+        placeholder="Enter the secret code" />
         <p id="errorLabel" class="text-red-500 mt-2 hidden">Invalid code. Please try again.</p>
       </div>
       <div class="flex flex-col justify-center">
@@ -91,14 +94,20 @@
 <div class="dialog-overlay fixed inset-0 bg-black bg-opacity-50 items-center justify-center hidden" id="messageDialogOverlay">
   <div class="dialo p-6 rounded shadow-lg w-full max-w-md bg-purple-900 bg-pattern">
     <h2 class="text-white text-2xl font-bold mb-4 text-center">Create Message</h2>
-    <form action="messages/newMessage" method="POST">
+    <form action="/newMessage" method="POST">
       <div class="mb-4">
-        <label class="block text-white mb-2" for="headline">Message Title</label>
-        <input type="text" id="headline" name="headline" class="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        <label for="headline" class="sr-only">
+          headline
+        </label>
+        <input type="text" id="headline" name="headline" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-700 text-white"
+        placeholder="Headline" />
       </div>
       <div class="mb-4">
-        <label class="block text-white mb-2" for="description">Description</label>
-        <input type="text" id="description" name="description" class="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        <label for="description" class="sr-only">
+          description
+        </label>
+        <input type="text" id="description" name="description" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-700 text-white"
+        placeholder="Description" />
       </div>
       <div class="flex flex-col justify-center">
         <button type="submit" class="text-center py-2 bg-purple-500 text-white rounded mt-3 hover:bg-purple-600">Join</button>
@@ -115,14 +124,44 @@
 
   document.getElementById("closeButton").addEventListener("click", function () {
     document.getElementById("memberDialogOverlay").style.display = "none";
+    document.getElementById("errorLabel").classList.add("hidden");
+
   });
 
   document.getElementById("joinForm").addEventListener("submit", function (event) {
     event.preventDefault();
-    event.target.submit();
+    const form = event.target;
+    const errorLabel = document.getElementById("errorLabel");
+    
+    // Submit form using fetch
+    fetch(form.action, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        code: document.getElementById("code").value
+      })
+    })
+    .then(response => {
+      if (response.ok) {
+        // Redirect on success
+        window.location.href = "/";
+      } else {
+        // Show error message
+        errorLabel.classList.remove("hidden");
+        document.getElementById("code").value = ""; // Clear the input
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      errorLabel.classList.remove("hidden");
+    });
   });
 
   document.getElementById("createMessage").addEventListener("click", function () {
+        document.getElementById("headline").value = "";
+        document.getElementById("description").value = "";
         document.getElementById("messageDialogOverlay").style.display = "flex";
   });
 

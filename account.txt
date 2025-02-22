@@ -5,5 +5,5 @@ qwee
 
 
 TODO: 
-index page
-edit and deelte functionality
+when input wrong disired (log in and secret code)
+if already admin 12345 must show error

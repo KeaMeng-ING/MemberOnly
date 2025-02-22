@@ -3,7 +3,6 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("./passportConfig");
 const indexRouter = require("./routes/indexRouter");
-const messageRouter = require("./routes/messageRouter");
 const path = require("path");
 const pool = require("./db/pool");
 const cookieParser = require("cookie-parser");
@@ -13,6 +12,8 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
+const methodOverride = require("method-override");
+app.use(methodOverride("_method"));
 
 app.use(
   session({
@@ -32,7 +33,6 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
-app.use("/messages", messageRouter);
 
 passport.serializeUser((user, done) => {
   done(null, user.id);

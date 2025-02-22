@@ -1,8 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
+const messageController = require("../controllers/messageController");
 const passport = require("passport");
+const methodOverride = require("method-override");
 
+router.use(express.urlencoded({ extended: true }));
+router.use(express.json());
+
+router.use(methodOverride("_method"));
 router.get("/", (req, res) => {
   if (req.user) {
     return res.redirect("/home");
@@ -30,7 +36,12 @@ router.get("/log-out", (req, res, next) => {
   });
 });
 
-router.get("/home", userController.renderHome);
+router.delete("/delete/:headline", messageController.deleteMessage);
+router.post("/editMessage", messageController.editMessage);
+router.post("/newMessage", messageController.newMessage);
+
+router.get("/home", messageController.getMessages);
+router.get("/home/page/:page", messageController.getMessages);
 
 router.get("/user/:id", userController.renderUserById);
 

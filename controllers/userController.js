@@ -26,7 +26,6 @@ const userController = {
         hashedPassword
       );
 
-      console.log("User created");
       res.redirect("/");
     } catch (error) {
       res.status(500).send(error);
@@ -52,22 +51,21 @@ const userController = {
 
   async joinMember(req, res) {
     if (!req.user) {
-      console.log("Not log in");
       return res.redirect("/log-in");
     }
 
     try {
       const { code } = req.body;
+      console.log(code);
       if (code === process.env.SECRET_CODE) {
         await queries.updateMembershipStatus(req.user.id);
-        console.log("You are now a member");
+        return res.status(200).json({ message: "Membership updated" });
       } else if (code === process.env.IS_ADMIN_CODE) {
         await queries.updateAdminStatus(req.user.id);
-        console.log("You are now an admin");
+        return res.status(200).json({ message: "Admin status updated" });
       } else {
-        console.log("You are not a member");
+        return res.status(400).json({ error: "Invalid code" });
       }
-      res.redirect("/");
     } catch (error) {
       res.status(500).send(error);
     }

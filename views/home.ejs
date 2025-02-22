@@ -9,47 +9,134 @@
       <div class="w-full max-w-2xl space-y-8">
         <h2 class="text-3xl font-bold text-center text-white">Messages</h2>
         <div class="space-y-4">
-          <% allMessage.reverse().forEach((message) => { %>
-          <div key="{message.id}" class="rounded-xl bg-gray-800 bg-opacity-50 p-6 backdrop-filter backdrop-blur-lg border border-purple-300 border-opacity-20">
-            <h3 class="text-2xl font-semibold text-purple-200 text-center">
-              <%= message.headline %>
-            </h3>
-            <p class="mt-2 text-gray-300"><%= message.description %></p>
-            <% if (locals.user.memberstatus == "Member" || locals.user.isadmin) { %>
-            <div class="flex items-center justify-between mt-3 text-gray-400">
-              <p>From: <%= message.username %></p>
-              <p>
-                <%= new Date(message.timecreated).toLocaleString('en-US', { timeZone: 'Asia/Bangkok', hour12: true }) %>
-              </p>
+          <% allMessage.forEach((message) => { %>
+            <div class="rounded-xl bg-gray-800 bg-opacity-50 p-6 backdrop-filter backdrop-blur-lg border border-purple-300 border-opacity-20">
+              <h3 class="text-2xl font-semibold text-purple-200 text-center">
+                <%= message.headline %>
+              </h3>
+              <p class="mt-2 text-gray-300"><%= message.description %></p>
+              <% if (locals.user.memberstatus == "Member" || locals.user.isadmin) { %>
+                <div class="flex items-center justify-between mt-3 text-gray-400">
+                  <p>From: <%= message.username %></p>
+                  <p>
+                    <%= new Date(message.timecreated).toLocaleString('en-US', { timeZone: 'Asia/Bangkok', hour12: true }) %>
+                  </p>
+                </div>
+              <% } else { %>
+                <div class="flex items-center justify-between mt-3 text-gray-400">
+                  <p>From: Anonymous</p>
+                  <p>
+                   Sent: Anonymous
+                  </p>
+                </div>
+              <% } %>
+              <% if (message.userid == locals.user.id || locals.user.isadmin) { %>
+                <div class="mt-4 flex space-x-4">
+                  <a href="#" 
+                     class="text-blue-500 hover:text-blue-400 edit-message-btn"
+                     data-user-id="<%= message.userid %>"
+                     data-headline="<%= message.headline %>"
+                     data-description="<%= message.description %>">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                  </a>
+                  <form action="/delete/<%= message.headline %>?_method=DELETE" method="POST" class="delete-form">
+                    <button type="submit" class="text-red-500 hover:text-red-400">
+                        <i class="fa-solid fa-trash-can"></i> Delete
+                    </button>
+                </form>
+                                
+                </div>
+              <% } %>
             </div>
-            <% } else { %>
-            <div class="flex items-center justify-between mt-3 text-gray-400">
-              <p>From: Anonymous</p>
-              <p>
-               Sent: Anonymous
-              </p>
-            </div>
-            <% } %>
-            <% if (message.userid == locals.user.id || locals.user.isadmin) { %>
-            <div class="mt-4 flex space-x-4">
-              <button class="text-blue-500 hover:text-blue-400">
-                <i class="fa-solid fa-pen-to-square"></i> Edit
-              </button>
-              <button class="text-red-500 hover:text-red-400">
-                <i class="fa-solid fa-trash-can"></i> Delete
-              </button>
-            </div>
+          <% }) %>
+        
+
+        <!-- Pagination Controls -->
+        <div class="flex justify-center space-x-4 mt-8">
+          <% if (hasPrevPage) { %>
+            <a href="/home/page/<%= currentPage - 1 %>" 
+               class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition">
+              Previous
+            </a>
+          <% } %>
+
+          <div class="flex items-center space-x-2">
+            <% for(let i = 1; i <= totalPages; i++) { %>
+              <a href="/home/page/<%= i %>"
+                 class="px-4 py-2 rounded transition <%= currentPage === i ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600' %>">
+                <%= i %>
+              </a>
             <% } %>
           </div>
-          <% }) %>
+
+          <% if (hasNextPage) { %>
+            <a href="/home/page/<%= currentPage + 1 %>"
+               class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition">
+              Next
+            </a>
+          <% } %>
         </div>
       </div>
     </main>
 
+    <!-- Modify the edit dialog form -->
+<div class="dialog-overlay fixed inset-0 bg-black bg-opacity-50 items-center justify-center hidden" id="editMessageDialog">
+  <div class="dialog p-6 rounded shadow-lg w-full max-w-md bg-purple-900 bg-pattern">
+    <h2 class="text-white text-2xl font-bold mb-4 text-center">Edit Message</h2>
+    <form action="/editMessage" method="POST">
+      <input type="hidden" id="editUserId" name="userId">
+      <div class="mb-4">
+        <label class="block text-white mb-2" for="editHeadline">Message Title (Cannot be edit)</label>
+        <input type="text" id="editHeadline" name="headline" disabled class="w-full px-3 py-2 border text-white  border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+      </div>
+      <div class="mb-4">
+        <label class="block text-white mb-2" for="editDescription">Description</label>
+        <input type="text" id="editDescription" name="description" class="w-full px-3 py-2 border text-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-700" />
+      </div>
+      <div class="flex flex-col justify-center">
+        <button type="submit" class="text-center py-2 bg-purple-500 text-white rounded mt-3 hover:bg-purple-600">Save Changes</button>
+        <button type="button" id="editMessageClose" class="text-center py-2 mt-2 text-white rounded">Close</button>
+      </div>
+    </form>
+  </div>
+</div>
 
+<script>
+const editButtons = document.querySelectorAll('.edit-message-btn');
+const editDialog = document.getElementById('editMessageDialog');
+const editMessageClose = document.getElementById('editMessageClose');
+const editForm = editDialog.querySelector('form');
 
-    <script>
+editButtons.forEach(button => {
+  button.addEventListener('click', (e) => {
+    e.preventDefault();
+    
+    const userId = button.dataset.userId;
+    const headline = button.dataset.headline;
+    const description = button.dataset.description;
+    
+    document.getElementById('editUserId').value = userId;
+    document.getElementById('editHeadline').value = headline;
+    document.getElementById('editDescription').value = description;
+    
+    editDialog.style.display = 'flex';
+  });
+});
 
-    </script>
+editMessageClose.addEventListener('click', () => {
+  editDialog.style.display = 'none';
+});
+
+editDialog.addEventListener('click', (e) => {
+  if (e.target === editDialog) {
+    editDialog.style.display = 'none';
+  }
+});
+
+editForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+  event.target.submit();
+});
+</script>
   </body>
 </html>
