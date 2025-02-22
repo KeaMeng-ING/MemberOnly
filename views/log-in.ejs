@@ -7,7 +7,7 @@
     <main class="flex min-h-screen flex-col items-center justify-center p-24 bg-pattern">
         <div class="w-full max-w-md space-y-8 rounded-xl bg-gray-800 bg-opacity-50 p-8 backdrop-filter backdrop-blur-lg border border-purple-300 border-opacity-20">
           <h2 class="text-3xl font-bold text-center text-white">Log In</h2>
-          <form class="mt-8 space-y-6"  action="/log-in" method="POST">
+          <form class="mt-8 space-y-6"  action="/log-in" method="POST" id="loginForm">
             <div>
               <label for="username" class="sr-only">
                 Username
@@ -34,6 +34,9 @@
                 placeholder="Password"
               />
             </div>
+            <% if (error) { %>
+              <p class="text-red-500"><%= error %></p>
+            <% } %>
             <div>
               <button
                 type="submit"
@@ -51,5 +54,9 @@
           </p>
         </div>
       </main>
+
+      <script>
+        
+      </script>
 </body>
 </html>

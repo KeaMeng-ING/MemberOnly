@@ -1,9 +1,0 @@
-qwee
-
-123
-
-
-
-TODO: 
-when input wrong disired (log in and secret code)
-if already admin 12345 must show error

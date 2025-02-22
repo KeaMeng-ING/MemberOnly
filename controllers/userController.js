@@ -34,7 +34,8 @@ const userController = {
 
   async renderLogin(req, res) {
     try {
-      res.render("log-in");
+      const error = req.query.error ? "Invalid username or password" : "";
+      res.render("log-in", { error });
     } catch (error) {
       res.status(500).send(error);
     }
@@ -49,23 +50,52 @@ const userController = {
     }
   },
 
+  // async joinMember(req, res) {
+  //   if (!req.user) {
+  //     return res.redirect("/log-in");
+  //   }
+  //   try {
+  //     const { code } = req.body;
+  //     console.log(code);
+  //     if (code === process.env.SECRET_CODE) {
+  //       if (req.user.memberstatus === "Member") {
+  //         return res.status(400).json({ error: "User is already a member" });
+  //       } else if (req.user.isAdmin) {
+  //         return res.status(400).json({ error: "User is already an admin" });
+  //       }
+  //       await queries.updateMembershipStatus(req.user.id);
+  //       return res.status(200).json({ message: "Membership updated" });
+  //     } else if (code === process.env.IS_ADMIN_CODE) {
+  //       await queries.updateAdminStatus(req.user.id);
+  //       return res.status(200).json({ message: "Admin status updated" });
+  //     } else {
+  //       return res.status(400).json({ error: "Invalid code" });
+  //     }
+  //   } catch (error) {
+  //     res.status(500).send(error);
+  //   }
+  // },
+
   async joinMember(req, res) {
     if (!req.user) {
       return res.redirect("/log-in");
     }
-
     try {
       const { code } = req.body;
-      console.log(code);
+      const error = "";
       if (code === process.env.SECRET_CODE) {
+        if (req.user.memberstatus === "Member") {
+          error = "User is already a member";
+        } else if (req.user.isAdmin) {
+          error = "User is already an admin";
+        }
         await queries.updateMembershipStatus(req.user.id);
-        return res.status(200).json({ message: "Membership updated" });
       } else if (code === process.env.IS_ADMIN_CODE) {
         await queries.updateAdminStatus(req.user.id);
-        return res.status(200).json({ message: "Admin status updated" });
       } else {
-        return res.status(400).json({ error: "Invalid code" });
+        error = "Invalid code";
       }
+      res.status(400).json({ error });
     } catch (error) {
       res.status(500).send(error);
     }
