@@ -16,5 +16,5 @@ yarn-error.log*
 Thumbs.db
 
 # Tailwind
-public/stylesheets/tailwind.css
-public/stylesheets/style.css
+# public/stylesheets/tailwind.css
+# public/stylesheets/style.css
