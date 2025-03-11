@@ -5,8 +5,10 @@ const passport = require("./passportConfig");
 const indexRouter = require("./routes/indexRouter");
 const path = require("path");
 const pool = require("./db/pool");
+require("./passportConfig");
 const cookieParser = require("cookie-parser");
 const app = express();
+const PgSession = require("connect-pg-simple")(session);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -17,13 +19,16 @@ app.use(methodOverride("_method"));
 
 app.use(
   session({
-    secret: "cats",
-    resave: false,
-    saveUninitialized: false,
+    store: new PgSession({
+      pool, // Use the same pool as your database
+      tableName: "sessions", // Name of the table to store sessions
+    }),
+    secret: process.env.SESSION_SECRET || "keameng1", // Use a strong secret in production
+    resave: false, // Don't resave session if unmodified
+    saveUninitialized: false, // Don't create session until something is stored
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24, // 1 day in milliseconds
-      httpOnly: true, // Prevent client-side JS from accessing the cookie
-      secure: process.env.NODE_ENV === "production", // Ensure cookies are only sent over HTTPS in production
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production (HTTPS)
+      maxAge: 24 * 60 * 60 * 1000, // Session expires after 24 hours
     },
   })
 );
