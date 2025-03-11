@@ -21,18 +21,24 @@ app.use(
     store: new PgSession({
       pool,
       tableName: "sessions",
+      createTableIfMissing: true, // This will attempt to create the table if it doesn't exist
     }),
     secret: process.env.SESSION_SECRET || "keameng1",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production" ? true : false,
-      sameSite: "lax",
+      secure: false, // Temporarily set to false to test if HTTPS is the issue
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
+
+app.use((req, res, next) => {
+  console.log("Session ID:", req.sessionID);
+  console.log("Session data:", req.session);
+  next();
+});
 
 app.use(passport.session());
 app.use(express.json());
@@ -42,6 +48,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/", indexRouter);
+
+app.use((req, res, next) => {
+  console.log(
+    "User after passport:",
+    req.user ? "Authenticated" : "Not authenticated"
+  );
+  next();
+});
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -64,10 +78,4 @@ passport.deserializeUser(async (id, done) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
-});
-
-app.use((req, res, next) => {
-  console.log("Session:", req.session);
-  console.log("User:", req.user);
-  next();
 });
